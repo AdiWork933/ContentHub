@@ -909,7 +909,7 @@ This project is open-source and available for personal and commercial use.
 **Aditya Choudhary**
 - AI/ML Enthusiast
 - Backend Developer
-- Computer Science Engineering Student
+- Computer Science Engineering & (AI/ML) Student
 
 ---
 
@@ -923,4 +923,5 @@ This project is open-source and available for personal and commercial use.
 
 **Last Updated:** January 17, 2026  
 **Portfolio Status:** ✅ Production Ready
+
 
