@@ -193,6 +193,10 @@ Use the provided setup scripts for automated environment creation and dependency
 ```powershell
 .\setup.ps1
 ```
+if problem occurred use in vs code terminal or powershell terminal
+```
+powershell -ExecutionPolicy Bypass -File .\setup.ps1
+```
 
 **macOS/Linux:**
 ```bash
@@ -321,7 +325,11 @@ Windows (PowerShell):
 ```powershell
 .\run.ps1
 ```
-
+if problem occured during runn time use
+```
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass -Force
+./run.ps1
+```
 macOS/Linux:
 ```bash
 chmod +x run.sh
@@ -915,3 +923,4 @@ This project is open-source and available for personal and commercial use.
 
 **Last Updated:** January 17, 2026  
 **Portfolio Status:** ✅ Production Ready
+
