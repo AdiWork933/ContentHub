@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}{{ post.title }} - Blog - My Portfolio{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <article>
+                <h1 class="mb-2">{{ post.title }}</h1>
+                <p class="text-muted">
+                    Published on {{ post.created_at.strftime('%B %d, %Y') }}
+                    {% if post.related_project %}
+                    · <a href="{{ url_for('project_detail', project_id=post.project_id) }}">{{ post.related_project.title }}</a>
+                    {% endif %}
+                </p>
+                
+                <div class="my-4">
+                    {{ post.content|safe }}
+                </div>
+
+                <div class="mt-5 pt-4 border-top border-bottom">
+                    <p class="text-muted">Last updated {{ post.updated_at.strftime('%B %d, %Y') }}</p>
+                </div>
+            </article>
+
+            <div class="mt-5">
+                <a href="{{ url_for('blog') }}" class="btn btn-outline-secondary">← Back to Blog</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,235 @@
+{% extends "base.html" %}
+
+{% block title %}Home - {{ settings.site_title if settings else 'My Portfolio' }}{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero py-120">
+    <div class="container">
+        <div class="row align-items-center min-vh-100">
+            <div class="col-lg-8 mx-auto text-center">
+                <h1 class="display-3 fw-800 mb-4 lh-1 text-white">
+                    {{ settings.owner_name if settings else 'Welcome' }}
+                </h1>
+                <p class="lead fs-5 mb-4 text-primary-light">
+                    {{ settings.hero_text if settings else 'Full Stack Developer' }}
+                </p>
+                <p class="fs-6 text-muted mb-5 mx-auto" style="max-width: 600px; line-height: 1.8;">
+                    {{ settings.bio if settings else 'Welcome to my portfolio' }}
+                </p>
+                <div class="d-flex gap-3 justify-content-center flex-wrap">
+                    <a href="{{ url_for('projects') }}" class="btn btn-primary btn-lg">
+                        Explore Projects
+                    </a>
+                    <a href="{{ url_for('blog') }}" class="btn btn-outline-primary btn-lg">
+                        Read Articles
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Featured Projects Section -->
+<section class="py-120 bg-light">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="display-5 fw-bold mb-3">Featured Projects</h2>
+            <p class="lead text-muted">Handpicked selection of my recent work</p>
+        </div>
+        
+        {% if projects %}
+        <div class="row g-4">
+            {% for project in projects[:6] %}
+            <div class="col-md-6 col-lg-4">
+                <div class="card project-card h-100 border-0">
+                    <div class="card-img-wrapper position-relative overflow-hidden" style="height: 240px;">
+                        {% if project.images %}
+                        <img src="{{ project.images[0].image_path }}" class="card-img-top w-100 h-100" style="object-fit: cover;" alt="{{ project.title }}">
+                        {% else %}
+                        <div class="placeholder-image bg-secondary w-100 h-100 d-flex align-items-center justify-content-center">
+                            <span class="text-white-50">📁 No Image</span>
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title fw-bold">{{ project.title }}</h5>
+                        <p class="card-text text-muted flex-grow-1">{{ project.description[:100] | safe }}...</p>
+                        <div class="d-flex gap-2 mt-3">
+                            {% if project.live_link %}
+                            <a href="{{ project.live_link }}" target="_blank" class="btn btn-sm btn-primary flex-grow-1">
+                                Live Demo
+                            </a>
+                            {% endif %}
+                            {% if project.repo_link %}
+                            <a href="{{ project.repo_link }}" target="_blank" class="btn btn-sm btn-outline-primary flex-grow-1">
+                                Source Code
+                            </a>
+                            {% endif %}
+                            <a href="{{ url_for('project_detail', project_id=project.id) }}" class="btn btn-sm btn-outline-secondary">
+                                Details
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        
+        <div class="text-center mt-5">
+            <a href="{{ url_for('projects') }}" class="btn btn-outline-primary btn-lg">
+                View All Projects →
+            </a>
+        </div>
+        {% else %}
+        <div class="text-center py-5">
+            <p class="text-muted fs-6">No projects available yet. Check back soon!</p>
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+<!-- Contact & Social Section -->
+<section class="py-120">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="display-5 fw-bold mb-3">Let's Connect</h2>
+            <p class="lead text-muted">Get in touch or follow me on social media</p>
+        </div>
+        
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <!-- Email -->
+                {% if settings and settings.contact_email %}
+                <div class="card border-0 mb-4 p-4 text-center" style="background: linear-gradient(135deg, rgba(91, 76, 245, 0.05), rgba(139, 127, 255, 0.05));">
+                    <h5 class="fw-bold mb-2">📧 Email</h5>
+                    <p class="text-muted mb-0">
+                        <span class="fw-600 text-dark">{{ settings.contact_email }}</span>
+                    </p>
+                </div>
+                {% endif %}
+                
+                <!-- Social Links -->
+                {% if settings and settings.social_links %}
+                <div class="mb-4">
+                    <h5 class="text-center fw-bold mb-4">Connect on Social Media</h5>
+                    <div class="row g-3 text-center">
+                        {% for platform, url in settings.social_links.items() %}
+                            {% if platform.lower() != 'email' and url %}
+                            <div class="col-md-4 col-sm-6 col-12">
+                                <a href="{{ url }}" target="_blank" rel="noopener noreferrer" class="btn btn-outline-primary w-100">
+                                    {{ platform.title() }}
+                                </a>
+                            </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Experience & Tools Section -->
+<section class="py-120 bg-light">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="display-5 fw-bold mb-3">Experience & Tools</h2>
+            <p class="lead text-muted">Internships, roles and the tools I use</p>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-lg-6">
+                <h4 class="mb-3">Experience</h4>
+                {% if experiences %}
+                <div class="list-group">
+                    {% for exp in experiences %}
+                    <div class="list-group-item mb-2">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div>
+                                <h5 class="mb-1">{{ exp.title }} <small class="text-muted">@ {{ exp.company }}</small></h5>
+                                <p class="mb-1 text-muted">{{ exp.role or '' }}</p>
+                                <small class="text-muted">
+                                    {% if exp.start_date %}{{ exp.start_date.strftime('%b %Y') }}{% endif %}
+                                    -
+                                    {% if exp.ongoing %}Present{% elif exp.end_date %}{{ exp.end_date.strftime('%b %Y') }}{% else %}-{% endif %}
+                                </small>
+                                <p class="mt-2">{{ exp.description }}</p>
+                            </div>
+                            {% if exp.certificate_image_path %}
+                            <div style="max-width:140px; margin-left:12px;">
+                                <img src="{{ exp.certificate_image_path }}" alt="certificate" class="img-fluid rounded">
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <p class="text-muted">No experiences yet.</p>
+                {% endif %}
+            </div>
+
+            <div class="col-lg-6">
+                <h4 class="mb-3">Tools & Technologies</h4>
+                {% if tools %}
+                <div class="mb-3">
+                    {% for tool in tools %}
+                    <span class="badge bg-primary me-2 mb-2">{{ tool.name }}</span>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <p class="text-muted">No tools listed yet.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    .py-120 {
+        padding-top: 7.5rem;
+        padding-bottom: 7.5rem;
+    }
+    
+    .min-vh-100 {
+        min-height: 100vh;
+    }
+    
+    .text-primary-light {
+        color: var(--primary-light);
+    }
+    
+    .fw-800 {
+        font-weight: 800;
+    }
+    
+    .fw-600 {
+        font-weight: 600;
+    }
+    
+    .card-img-wrapper img {
+        transition: transform 0.5s ease;
+    }
+    
+    .project-card:hover .card-img-wrapper img {
+        transform: scale(1.1);
+    }
+    
+    .display-5 {
+        font-size: 2.5rem;
+    }
+    
+    @media (max-width: 768px) {
+        .display-3 {
+            font-size: 2rem;
+        }
+        
+        .py-120 {
+            padding-top: 4rem;
+            padding-bottom: 4rem;
+        }
+    }
+</style>
+{% endblock %}

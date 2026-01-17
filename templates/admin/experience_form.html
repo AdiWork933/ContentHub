@@ -1,0 +1,77 @@
+{% extends "admin/layout.html" %}
+
+{% block admin_content %}
+<div class="row">
+    <div class="col-lg-8 mx-auto">
+        <div class="card">
+            <div class="card-header bg-gradient-primary text-white">
+                <h4 class="mb-0">{% if experience %}✏️ Edit Experience{% else %}➕ Add Experience{% endif %}</h4>
+            </div>
+            <div class="card-body p-4">
+                <form method="POST" enctype="multipart/form-data">
+                    <div class="mb-3">
+                        <label class="form-label">Title *</label>
+                        <input type="text" name="title" class="form-control" required value="{{ experience.title if experience else '' }}">
+                    </div>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Company</label>
+                            <input type="text" name="company" class="form-control" value="{{ experience.company if experience else '' }}">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Role</label>
+                            <input type="text" name="role" class="form-control" value="{{ experience.role if experience else '' }}">
+                        </div>
+                    </div>
+
+                    <div class="row g-3 mt-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Start Date</label>
+                            <input type="date" name="start_date" class="form-control" value="{% if experience and experience.start_date %}{{ experience.start_date.strftime('%Y-%m-%d') }}{% endif %}">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">End Date</label>
+                            <input type="date" name="end_date" class="form-control" value="{% if experience and experience.end_date %}{{ experience.end_date.strftime('%Y-%m-%d') }}{% endif %}">
+                            <div class="form-check mt-2">
+                                <input class="form-check-input" type="checkbox" name="ongoing" id="ongoing" {% if experience and experience.ongoing %}checked{% endif %}>
+                                <label class="form-check-label" for="ongoing">Currently Working / Ongoing</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-3">
+                        <label class="form-label">Location</label>
+                        <input type="text" name="location" class="form-control" value="{{ experience.location if experience else '' }}">
+                    </div>
+
+                    <div class="mt-3">
+                        <label class="form-label">Description</label>
+                        <textarea name="description" class="form-control" rows="5">{{ experience.description if experience else '' }}</textarea>
+                    </div>
+
+                    <div class="mt-3">
+                        <label class="form-label">Certificate (optional)</label>
+                        {% if experience and experience.certificate_image_path %}
+                        <div class="mb-2">
+                            <img src="{{ experience.certificate_image_path }}" alt="certificate" class="img-fluid" style="max-height:160px;">
+                        </div>
+                        {% endif %}
+                        <input type="file" name="certificate" class="form-control">
+                        <small class="text-muted">Upload certificate image (PNG/JPG)</small>
+                    </div>
+
+                    <div class="mt-3">
+                        <label class="form-label">Order</label>
+                        <input type="number" name="order" class="form-control" value="{{ experience.order if experience else 0 }}">
+                    </div>
+
+                    <div class="mt-4 d-flex gap-2">
+                        <button class="btn btn-success">Save</button>
+                        <a href="{{ url_for('admin_experiences') }}" class="btn btn-outline-secondary">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

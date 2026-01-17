@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{% block title %}Blog - My Portfolio{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <h1 class="mb-5">Blog</h1>
+    
+    {% if posts.items %}
+    <div class="row">
+        <div class="col-lg-8">
+            {% for post in posts.items %}
+            <article class="card mb-4 shadow-sm">
+                <div class="card-body">
+                    <h3 class="card-title">
+                        <a href="{{ url_for('blog_post', slug=post.slug) }}" class="text-decoration-none">
+                            {{ post.title }}
+                        </a>
+                    </h3>
+                    <p class="card-text text-muted small">
+                        Published on {{ post.created_at.strftime('%B %d, %Y') }}
+                        {% if post.related_project %}
+                        · <a href="{{ url_for('project_detail', project_id=post.project_id) }}">{{ post.related_project.title }}</a>
+                        {% endif %}
+                    </p>
+                    <p class="card-text">{{ post.content[:200] }}...</p>
+                    <a href="{{ url_for('blog_post', slug=post.slug) }}" class="btn btn-sm btn-primary">Read More</a>
+                </div>
+            </article>
+            {% endfor %}
+
+            <!-- Pagination -->
+            {% if posts.pages > 1 %}
+            <nav aria-label="Page navigation">
+                <ul class="pagination justify-content-center">
+                    {% if posts.has_prev %}
+                    <li class="page-item">
+                        <a class="page-link" href="{{ url_for('blog', page=posts.prev_num) }}">Previous</a>
+                    </li>
+                    {% endif %}
+                    
+                    {% for page_num in posts.iter_pages() %}
+                        {% if page_num %}
+                        {% if page_num == posts.page %}
+                        <li class="page-item active">
+                            <span class="page-link">{{ page_num }}</span>
+                        </li>
+                        {% else %}
+                        <li class="page-item">
+                            <a class="page-link" href="{{ url_for('blog', page=page_num) }}">{{ page_num }}</a>
+                        </li>
+                        {% endif %}
+                        {% else %}
+                        <li class="page-item disabled"><span class="page-link">...</span></li>
+                        {% endif %}
+                    {% endfor %}
+                    
+                    {% if posts.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="{{ url_for('blog', page=posts.next_num) }}">Next</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </nav>
+            {% endif %}
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">About Blog</h5>
+                    <p class="small">Stay updated with my latest posts on development, design, and tech insights.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <p class="text-center text-muted">No blog posts yet. Check back soon!</p>
+    {% endif %}
+</div>
+{% endblock %}

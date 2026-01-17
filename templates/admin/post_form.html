@@ -1,0 +1,68 @@
+{% extends "admin/layout.html" %}
+
+{% block admin_content %}
+<div class="card">
+    <div class="card-header bg-primary text-white">
+        <h4 class="mb-0">{% if post %}Edit Blog Post{% else %}New Blog Post{% endif %}</h4>
+    </div>
+    <div class="card-body">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                <div class="alert alert-{{ 'danger' if category == 'error' else category }} alert-dismissible fade show">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <form method="POST">
+            <div class="mb-3">
+                <label for="title" class="form-label">Post Title *</label>
+                <input type="text" class="form-control" id="title" name="title" value="{{ post.title if post else '' }}" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="project_id" class="form-label">Related Project (Optional)</label>
+                <select class="form-control" id="project_id" name="project_id">
+                    <option value="">-- No Project --</option>
+                    {% for proj in projects %}
+                    <option value="{{ proj.id }}" {% if post and post.project_id == proj.id %}selected{% endif %}>{{ proj.title }}</option>
+                    {% endfor %}
+                </select>
+                <small class="text-muted">Link this post to a project (e.g., Devlog for Project X)</small>
+            </div>
+
+            <div class="mb-3">
+                <label for="content" class="form-label">Content *</label>
+                <textarea class="form-control" id="content" name="content" rows="10" required>{{ post.content if post else '' }}</textarea>
+                <small class="text-muted">HTML is supported. Use &lt;strong&gt;, &lt;em&gt;, &lt;code&gt;, etc.</small>
+            </div>
+
+            <div class="mb-3 form-check">
+                <input type="checkbox" class="form-check-input" id="published" name="published" {% if post and post.published %}checked{% elif not post %}checked{% endif %}>
+                <label class="form-check-label" for="published">
+                    Publish this post (unchecked = Draft)
+                </label>
+            </div>
+
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-success">💾 {% if post %}Update{% else %}Create{% endif %} Post</button>
+                <a href="{{ url_for('admin_posts') }}" class="btn btn-outline-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Include a simple editor (optional enhancement with TinyMCE or CKEditor) -->
+<script>
+// Optional: Add text formatting helpers
+document.addEventListener('DOMContentLoaded', function() {
+    const contentArea = document.getElementById('content');
+    
+    // Add keyboard shortcuts or formatting helpers if needed
+    // For now, this is a simple textarea
+});
+</script>
+{% endblock %}

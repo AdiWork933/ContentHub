@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+
+{% block title %}{{ project.title }} - My Portfolio{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-lg-8">
+            <!-- Image Carousel -->
+            {% if project.images %}
+            <div id="projectCarousel" class="carousel slide mb-4" data-bs-ride="carousel">
+                <div class="carousel-inner">
+                    {% for image in project.images %}
+                    <div class="carousel-item {% if loop.first %}active{% endif %}">
+                        <img src="{{ image.image_path }}" class="d-block w-100" alt="{{ project.title }}">
+                    </div>
+                    {% endfor %}
+                </div>
+                {% if project.images|length > 1 %}
+                <button class="carousel-control-prev" type="button" data-bs-target="#projectCarousel" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon"></span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#projectCarousel" data-bs-slide="next">
+                    <span class="carousel-control-next-icon"></span>
+                </button>
+                {% endif %}
+            </div>
+            {% endif %}
+
+            <!-- Project Description -->
+            <div class="mb-4">
+                <h1>{{ project.title }}</h1>
+                {% if project.category %}
+                <span class="badge bg-primary">{{ project.category }}</span>
+                {% endif %}
+                <p class="text-muted small mt-2">Created on {{ project.created_at.strftime('%B %d, %Y') }}</p>
+            </div>
+
+            <div class="project-description">
+                {{ project.description|safe }}
+            </div>
+
+            <!-- Links -->
+            <div class="mt-4">
+                {% if project.live_link %}
+                <a href="{{ project.live_link }}" target="_blank" class="btn btn-primary btn-lg me-2">
+                    🔗 View Live
+                </a>
+                {% endif %}
+                {% if project.repo_link %}
+                <a href="{{ project.repo_link }}" target="_blank" class="btn btn-outline-primary btn-lg">
+                    📦 View Repository
+                </a>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Project Info</h5>
+                    <dl class="row">
+                        <dt class="col-sm-6">Category:</dt>
+                        <dd class="col-sm-6">{{ project.category or 'N/A' }}</dd>
+
+                        <dt class="col-sm-6">Created:</dt>
+                        <dd class="col-sm-6">{{ project.created_at.strftime('%b %d, %Y') }}</dd>
+                    </dl>
+                </div>
+            </div>
+
+            {% if project.blog_posts %}
+            <div class="card mt-3">
+                <div class="card-body">
+                    <h5 class="card-title">Related Posts</h5>
+                    <ul class="list-unstyled">
+                        {% for post in project.blog_posts %}
+                        <li class="mb-2">
+                            <a href="{{ url_for('blog_post', slug=post.slug) }}" class="text-decoration-none">
+                                {{ post.title }}
+                            </a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="mt-5 pt-4 border-top">
+        <a href="{{ url_for('projects') }}" class="btn btn-outline-secondary">← Back to Projects</a>
+    </div>
+</div>
+{% endblock %}

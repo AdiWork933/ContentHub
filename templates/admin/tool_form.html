@@ -1,0 +1,42 @@
+{% extends "admin/layout.html" %}
+
+{% block admin_content %}
+<div class="row">
+    <div class="col-md-6 mx-auto">
+        <div class="card">
+            <div class="card-header bg-gradient-primary text-white">
+                <h4 class="mb-0">{% if tool %}✏️ Edit Tool{% else %}➕ Add Tool{% endif %}</h4>
+            </div>
+            <div class="card-body p-4">
+                <form method="POST">
+                    <div class="mb-3">
+                        <label class="form-label">Name *</label>
+                        <input type="text" name="name" class="form-control" required value="{{ tool.name if tool else '' }}">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Category</label>
+                        <input type="text" name="category" class="form-control" value="{{ tool.category if tool else '' }}" placeholder="e.g., AI/ML, Web, DevOps">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Proficiency</label>
+                        <input type="text" name="proficiency" class="form-control" value="{{ tool.proficiency if tool else '' }}" placeholder="e.g., Basic, Intermediate, Advanced">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Details</label>
+                        <textarea name="details" class="form-control" rows="4">{{ tool.details if tool else '' }}</textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Order</label>
+                        <input type="number" name="order" class="form-control" value="{{ tool.order if tool else 0 }}">
+                    </div>
+
+                    <div class="d-flex gap-2 mt-3">
+                        <button class="btn btn-success">Save</button>
+                        <a href="{{ url_for('admin_tools') }}" class="btn btn-outline-secondary">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,87 @@
+{% extends "admin/layout.html" %}
+
+{% block admin_content %}
+<div class="card">
+    <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+        <h4 class="mb-0">Site Settings</h4>
+    </div>
+    <div class="card-body">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                <div class="alert alert-{{ 'danger' if category == 'error' else category }} alert-dismissible fade show">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <form method="POST">
+            <div class="mb-3">
+                <label for="site_title" class="form-label">Site Title</label>
+                <input type="text" class="form-control" id="site_title" name="site_title" value="{{ settings.site_title }}" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="owner_name" class="form-label">Owner Name</label>
+                <input type="text" class="form-control" id="owner_name" name="owner_name" value="{{ settings.owner_name }}" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="hero_text" class="form-label">Hero Section Text</label>
+                <input type="text" class="form-control" id="hero_text" name="hero_text" value="{{ settings.hero_text }}">
+            </div>
+
+            <div class="mb-3">
+                <label for="bio" class="form-label">Bio / About Me</label>
+                <textarea class="form-control" id="bio" name="bio" rows="4">{{ settings.bio }}</textarea>
+            </div>
+
+            <div class="mb-3">
+                <label for="contact_email" class="form-label">Contact Email</label>
+                <input type="email" class="form-control" id="contact_email" name="contact_email" value="{{ settings.contact_email or '' }}">
+            </div>
+
+            <div class="card bg-light mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">Social Links</h5>
+                    
+                    <div class="mb-3">
+                        <label for="social_github" class="form-label">GitHub</label>
+                        <input type="url" class="form-control" id="social_github" name="social_github" 
+                               value="{{ settings.social_links.get('github', '') if settings.social_links else '' }}"
+                               placeholder="https://github.com/yourname">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="social_linkedin" class="form-label">LinkedIn</label>
+                        <input type="url" class="form-control" id="social_linkedin" name="social_linkedin" 
+                               value="{{ settings.social_links.get('linkedin', '') if settings.social_links else '' }}"
+                               placeholder="https://linkedin.com/in/yourname">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="social_twitter" class="form-label">Twitter</label>
+                        <input type="url" class="form-control" id="social_twitter" name="social_twitter" 
+                               value="{{ settings.social_links.get('twitter', '') if settings.social_links else '' }}"
+                               placeholder="https://twitter.com/yourname">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="social_email" class="form-label">Email</label>
+                        <input type="url" class="form-control" id="social_email" name="social_email" 
+                               value="{{ settings.social_links.get('email', '') if settings.social_links else '' }}"
+                               placeholder="mailto:your@email.com">
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-success">💾 Save Settings</button>
+                <a href="{{ url_for('admin_dashboard') }}" class="btn btn-outline-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

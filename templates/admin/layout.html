@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}Admin - My Portfolio{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <div class="row">
+        <!-- Sidebar Navigation -->
+        <div class="col-lg-2">
+            <div class="list-group sticky-top">
+                <a href="{{ url_for('admin_dashboard') }}" class="list-group-item list-group-item-action">
+                    📊 Dashboard
+                </a>
+                <a href="{{ url_for('admin_settings') }}" class="list-group-item list-group-item-action">
+                    ⚙️ Settings
+                </a>
+                <a href="{{ url_for('admin_projects') }}" class="list-group-item list-group-item-action">
+                    🎨 Projects
+                </a>
+                <a href="{{ url_for('admin_experiences') }}" class="list-group-item list-group-item-action">
+                    💼 Experiences
+                </a>
+                <a href="{{ url_for('admin_tools') }}" class="list-group-item list-group-item-action">
+                    🛠️ Tools
+                </a>
+                <a href="{{ url_for('admin_posts') }}" class="list-group-item list-group-item-action">
+                    📝 Blog Posts
+                </a>
+                <a href="{{ url_for('admin_logout') }}" class="list-group-item list-group-item-action text-danger">
+                    🚪 Logout
+                </a>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="col-lg-10">
+            {% block admin_content %}{% endblock %}
+        </div>
+    </div>
+</div>
+{% endblock %}
